@@ -32,11 +32,10 @@ const InputBox: React.FC<InputBoxProps> = ({
     const handleFocus = () => {
         setIsFocused(true);
       };
-    
       const handleBlur = () => {
         setIsFocused(false);
       };
-      
+
   return (
     <>
       <Text style={[styles.baseText, styles.lable]}>{lable}</Text>

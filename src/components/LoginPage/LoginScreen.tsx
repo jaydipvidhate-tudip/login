@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import InputBox from '../input/InputBox';
 
 const LoginScreen: React.FC = () => {
@@ -14,8 +14,11 @@ const LoginScreen: React.FC = () => {
         setFormDetails({...formDetails,[name]:value})
     }
 
+    const handelOnSubmit =() =>{
+        Alert.alert("Logged In")
+    }
   return (
-    <ScrollView style={{width: '100%'}}>
+    <SafeAreaView style={{width: '100%'}}>
       <Image
         source={require('../../assets/LoginIllustration.jpg')}
         style={styles.bannerImage}
@@ -28,14 +31,14 @@ const LoginScreen: React.FC = () => {
       <InputBox isSecure returnKeyType='go' lable='Password' onChange={handelOnChangeText} value={formDetails.password} placeholder='Enter Your Password'/>
       <View style={styles.submitBtnWrapper}>
 
-      <TouchableOpacity style={styles.submitBtn}>
+      <TouchableOpacity activeOpacity={0.6} onPress={handelOnSubmit} style={styles.submitBtn}>
         <Text style={styles.baseText}>
             SignUp
         </Text>
       </TouchableOpacity>
       </View>
       </View>
-    </ScrollView>
+    </SafeAreaView>
   );
 };
 
