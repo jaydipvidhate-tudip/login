@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import {Alert, Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, Alert, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import InputBox from '../input/InputBox';
+import Realm, { ObjectSchema } from 'realm';
+import { useRealm } from '@realm/react';
+
 
 const LoginScreen: React.FC = () => {
 
@@ -10,15 +13,44 @@ const LoginScreen: React.FC = () => {
         password:""
     })
 
+    const realm = useRealm();
+
+    const [isLoading,setIsLoading] = useState(false)
+
     const handelOnChangeText = (value:string,name:string) => {
         setFormDetails({...formDetails,[name]:value})
     }
 
     const handelOnSubmit =() =>{
-        Alert.alert("Logged In")
+      setIsLoading(true)
+      if (formDetails.name == "" || formDetails.name =="" || formDetails.password =="") {
+        setTimeout(() => {
+          Alert.alert("Please Fill All Details")
+          setIsLoading(false)
+        }, 1000);
+        return 
+      }
+ 
+      realm.write(() => {
+        realm.create('User', {
+          _id: new Realm.BSON.ObjectId(),
+          name: formDetails.name,
+          email: formDetails.email,
+          password: formDetails.password,
+        });
+      });
+  
+      Alert.alert('added');
+      setIsLoading(false)
+
     }
+
+
   return (
-    <SafeAreaView style={{width: '100%'}}>
+    <>
+        <StatusBar barStyle={'dark-content'} backgroundColor="white" />
+    <ScrollView style={{width: '100%'}}>
+      
       <Image
         source={require('../../assets/LoginIllustration.jpg')}
         style={styles.bannerImage}
@@ -38,7 +70,14 @@ const LoginScreen: React.FC = () => {
       </TouchableOpacity>
       </View>
       </View>
-    </SafeAreaView>
+      {
+        isLoading && <View style={{width:'100%',height:'100%',alignItems:'center',justifyContent:"center",backgroundColor:"#00000080",position:'absolute',top:0,left:0}}>
+          <ActivityIndicator size={40} color="#ffffff"/>
+        </View>
+      }
+    </ScrollView>
+    </>
+
   );
 };
 
