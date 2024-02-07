@@ -4,14 +4,6 @@ export class User extends Realm.Object {
   email!: string;
   password!: string;
 
-  // static generate(name: string, email: string, password: string) {
-  //   return {
-  //     _id: new Realm.BSON.ObjectId(),
-  //     name,
-  //     email,
-  //     password,
-  //   };
-  // }
 
   static schema = {
     name: 'User',

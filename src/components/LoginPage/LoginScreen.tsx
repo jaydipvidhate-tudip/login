@@ -1,21 +1,31 @@
 import React, { useState } from 'react';
 import {ActivityIndicator, Alert, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import InputBox from '../input/InputBox';
-import Realm, { ObjectSchema } from 'realm';
+import Realm from 'realm';
 import { useRealm } from '@realm/react';
+import { styles } from './LoginStyles';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+
+type RootStackParamList = {
+  Login: any;
+  DashboardNavigator:any;
+};
+
+type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 
 
-const LoginScreen: React.FC = () => {
+
+const LoginScreen: React.FC<Props>= ({ navigation } ) => {
 
     const [formDetails,setFormDetails] = useState({
-        name:"",
-        email:"",
-        password:""
+        name:"Jaydip",
+        email:"jaydip@gm.com",
+        password:"123123"
     })
 
     const realm = useRealm();
 
-    const [isLoading,setIsLoading] = useState(false)
+    const [isLoading,setIsLoading] = useState<Boolean>(false)
 
     const handelOnChangeText = (value:string,name:string) => {
         setFormDetails({...formDetails,[name]:value})
@@ -25,7 +35,7 @@ const LoginScreen: React.FC = () => {
       setIsLoading(true)
       if (formDetails.name == "" || formDetails.name =="" || formDetails.password =="") {
         setTimeout(() => {
-          Alert.alert("Please Fill All Details")
+          Alert.alert("Plz fill all details")
           setIsLoading(false)
         }, 1000);
         return 
@@ -39,10 +49,12 @@ const LoginScreen: React.FC = () => {
           password: formDetails.password,
         });
       });
-  
-      Alert.alert('added');
-      setIsLoading(false)
-
+      const currntDate = new Date() 
+      setTimeout(() => {
+        setIsLoading(false)
+        
+        navigation.navigate('DashboardNavigator', { loginDate : currntDate.toString()})
+      }, 1000);
     }
 
 
@@ -81,37 +93,6 @@ const LoginScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  bannerImage: {
-    width: '100%',
-    height: 260,
-    objectFit: 'cover',
-  },
-  titleText: {
-    fontSize: 40,
-    fontWeight: '700',
-    color: 'black',
-    textAlign: 'center',
-    marginVertical:10
-  },
-  submitBtnWrapper:{
-    marginVertical:40,
-    justifyContent:"flex-end",
-    alignItems:'flex-end'
-  },
-  submitBtn:{
-    paddingHorizontal:60,
-    paddingVertical:14,
-    backgroundColor:"#004b79",
-    alignItems:"center",
-    borderRadius:100,
 
-  },
-  baseText: {
-    fontSize: 20,
-    fontWeight: '400',
-    color: 'white',
-  },
-});
 
 export default LoginScreen;
